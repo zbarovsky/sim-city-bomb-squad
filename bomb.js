@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const STARTING_TIME = 30;
     let remainingTime = 0;
-    let gameOver = false;
+    let gameOver = true;
     let countdown = null; // will hold countdown interval
     let wiresToCut = [];
     let wireState = {
@@ -45,8 +45,25 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function wireClick(e) {
-        console.log("clicked wire box")
-        console.log(e.target.id)
+        console.log("You clicked " + e.target.id)
+        let color = e.target.id;
+        // if the game is not over and the wire has not been cut
+        if (gameOver === false && wireState[color] === false) {
+            e.target.src = "img/cut-" + color + "-wire.png"
+            wireState[color] = true;
+            let wireIndex = wiresToCut.indexOf(color)
+            // if the wire has an index, it needs to be cut!
+            if (wireIndex > -1) {
+                console.log("correct!")
+                wiresToCut.splice(wireIndex, 1)
+                if (wiresToCut.length === 0) {
+                    endGame(true);
+                }
+            } else {
+                console.log("Bad news bears")
+                endGame(false);
+            }
+        }
     }
 
     function updateClock() {
@@ -59,8 +76,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function endGame(win) {
-        console.log("win is" + win);
-        
+        console.log("win is " + win);
+
         clearInterval(countdown)
         gameOver = true;
         resetBtn.disabled = false;
