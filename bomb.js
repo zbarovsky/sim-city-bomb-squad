@@ -25,12 +25,24 @@ document.addEventListener("DOMContentLoaded", function() {
     wireBox.addEventListener("click", wireClick);
 
     function reset () {
-        console.log("clicked reset");
+        timer.classList.remove("green");
+        body.classList.remove("flat");
+        for (let wire in wireState) {
+            wireState[wire] = false;
+        }
+        wiresToCut = [];
+
+        for (let i = 0; i < wireBox.children.length; i++) {
+            let color = wireBox.children[i].id;
+            wireBox.children[i].src = "img/uncut-" + color + "-wire.png"
+        }
+
         init()
     }
 
     function init() {
         remainingTime = STARTING_TIME;
+        gameOver = false;
         // set wires to cut
         for (const color in wireState) {
             let randoNum = Math.random();
